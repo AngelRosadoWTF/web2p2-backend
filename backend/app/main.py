@@ -15,7 +15,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-@app.lifespan("startup")
+@app.on_event("startup")
 def on_startup():
     SQLModel.metadata.create_all(engine)
 
