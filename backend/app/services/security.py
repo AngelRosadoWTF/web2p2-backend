@@ -13,7 +13,7 @@ def pwdVerify(plain_pwd: str, hashed_pwd: str):
 
 def crearToken(data: dict):
     to_encode = data.copy()
-    expire = datetime + timedelta(
+    expire = datetime.now() + timedelta(
         minutes=ACCESS_TOKEN_EXPIRE_MINUTES
     )
     to_encode.update({"exp": expire})

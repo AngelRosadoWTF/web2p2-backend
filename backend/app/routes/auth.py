@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, Response
+from fastapi import APIRouter, Depends, HTTPException, Response, Header
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlmodel import Session
 from app.database.conexion import getSession
@@ -30,7 +30,7 @@ def register_user(
         "message": "Usuario creado correctamente"
     }
 
-@router.post("/login")
+@router.post("/login/cookie")
 def login(
     response: Response,
     form_data: OAuth2PasswordRequestForm = Depends(),
@@ -60,6 +60,35 @@ def login(
         expires=180,
         samesite="lax"
     )
+
+    return{
+        "access_token": token,
+        "token_type": "bearer"
+    }
+
+@router.post("/login/header")
+def login(
+    response: Response,
+    form_data: OAuth2PasswordRequestForm = Depends(),
+    session: Session = Depends(getSession)
+):
+    user = autenticarUsuario(
+        session,
+        form_data.username,
+        form_data.password
+    )
+
+    if not user:
+        raise HTTPException(
+            status_code=401,
+            detail="Credenciales incorrectas"
+        )
+
+    token = crearToken(
+        {"sub": user.username}
+    )
+
+    response.headers["Token"] = token
 
     return{
         "access_token": token,
