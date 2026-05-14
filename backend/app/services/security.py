@@ -8,8 +8,8 @@ pwd = CryptContext(schemes=["argon2"], deprecated="auto")
 def pwdHash(password: str):
     return pwd.hash(password)
 
-def pwdVerify(plain_pwd: str, hashed_pwd: str):
-    return pwd.verify(plain_pwd, hashed_pwd)
+def pwdVerify(plain_password: str, hashed_password: str):
+    return pwd.verify(plain_password, hashed_password)
 
 def crearToken(data: dict):
     to_encode = data.copy()
