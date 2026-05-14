@@ -4,6 +4,6 @@ DATABASE_URL = "sqlite:///database.db"
 
 engine = create_engine(DATABASE_URL, echo=True)
 
-def get_session():
+def getSession():
     with Session(engine) as session:
         yield session
